@@ -13,7 +13,7 @@ EMBED_MODEL = "gemini-embedding-2"
 
 
 def embed_texts(texts, task_type):
-    for attempt in range(3):
+    for attempt in range(5):
         try:
             response = client.models.embed_content(
                 model=EMBED_MODEL,
@@ -22,9 +22,10 @@ def embed_texts(texts, task_type):
             )
             return np.array([e.values for e in response.embeddings])
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            time.sleep(3)
-    raise RuntimeError("Embedding failed 3 times")
+            wait = 60 if "429" in str(e) else 10 * (attempt + 1)
+            print(f"Attempt {attempt + 1} failed: {str(e)[:300]}")
+            time.sleep(wait)
+    raise RuntimeError("Embedding failed 5 times")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,12 @@
+[
+  {"q": "What is the difference between AR and VR?", "expect_any": ["completely", "replace"]},
+  {"q": "When was Pokémon Go released?", "expect_any": ["2016"]},
+  {"q": "Which company announced HoloLens 2, and in what year?", "expect_any": ["Microsoft"], "also": ["2019"]},
+  {"q": "Who created Videoplace?", "expect_any": ["Krueger"]},
+  {"q": "Which display technologies are commonly used in AR head-mounted displays?", "expect_any": ["LCOS", "micro-OLED"]},
+  {"q": "Which AR APIs do Apple and Google provide for mobile tracking?", "expect_any": ["ARKit"], "also": ["ARCore"]},
+  {"q": "Who created the first wearable computer in 1980?", "expect_any": ["Mann"]},
+  {"q": "What were head-up displays first developed for?", "expect_any": ["pilot"]},
+  {"q": "Name an AR/VR company in India.", "refusal": true},
+  {"q": "Who won the 2018 World Cup?", "refusal": true}
+]

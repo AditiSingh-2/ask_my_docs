@@ -8,7 +8,7 @@ from retrieve import retrieve
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-GEN_MODEL = "gemini-3.5-flash"  # use the model name that worked in hello_llm.py
+GEN_MODEL = "gemini-3.7-flash"
 
 SYSTEM_PROMPT = (
     "You answer questions using ONLY the context provided. "
@@ -24,7 +24,8 @@ def ask(question, k=3):
     context = "\n\n---\n\n".join(chunk for _, _, chunk in results)
     prompt = f"Context:\n{context}\n\nQuestion: {question}"
 
-    for attempt in range(3):
+    response = None
+    for attempt in range(5):
         try:
             response = client.models.generate_content(
                 model=GEN_MODEL,
@@ -37,10 +38,12 @@ def ask(question, k=3):
             )
             break
         except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            time.sleep(3)
-    else:
-        raise RuntimeError("Generation failed 3 times")
+            wait = 60 if "429" in str(e) else 10 * (attempt + 1)
+            print(f"Attempt {attempt + 1} failed: {str(e)[:300]}")
+            time.sleep(wait)
+
+    if response is None:
+        raise RuntimeError("Generation failed 5 times")
 
     usage = response.usage_metadata
     return {
